@@ -1,0 +1,20 @@
+image: gradle:5.1.1-jdk8
+stages:
+  - build
+  - smoke
+
+build:
+  stage: build
+  script:
+    - ./gradlew clean build
+
+smoke:
+  stage: smoke
+  script:
+    - ./gradlew runTests -Denv=prod -Dtags=SMOKE --stacktrace
+  artifacts:
+    when: always
+    paths:
+      - ./build/SinglePageReport/*
+  only:
+    - master
